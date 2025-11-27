@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration - Peintures{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+    
+    <div class="d-flex justify-content-end mb-4">
+        <a href="{{ path('app_home') }}" class="btn btn-success btn-sm px-3">
+            <i class="bi bi-box-arrow-right"></i> Retourner au site
+        </a>
+        &nbsp; &nbsp; &nbsp; &nbsp;
+       {% if user != null %}
+        <b>BIENVENUE  &nbsp;  </b> {{ user.name }} &nbsp;
+            <a href="{{ path('app_logout') }}" class="btn btn-danger btn-sm px-3">
+                <i class="bi bi-box-arrow-right"></i> Déconnexion
+            </a>
+        {% endif %}
+    </div>
+    
+    <h1 class="mb-4 text-center text-primary">🎨 Gestion des Peintures</h1>
+
+    <div class="d-flex justify-content-end mb-4">
+        <a href="{{ path('admin_painting_add') }}" class="btn btn-warning btn-sm px-3">
+            <i class="bi bi-box-arrow-right"></i> Ajouter une nouvelle peinture
+        </a>
+    </div> 
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <table class="table table-striped align-middle shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Titre</th>
+                <th>Visibilité</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for painting in paintings %}
+            <tr>
+                <td>{{ painting.id }}</td>
+                <td><img src="images/{{ painting.image }}" width="100px"></td>
+                <td>{{ painting.title }}</td>
+                <td>
+                    {% if painting.visible %}
+                        <span class="badge bg-success">Visible</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Masquée</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('admin_painting_edit', {id: painting.id}) }}" class="btn btn-sm btn-outline-primary">✏️ Modifier</a>
+
+                    <form action="{{ path('admin_painting_toggle', {id: painting.id}) }}" method="post" style="display:inline;">
+                        <button class="btn btn-sm btn-outline-warning">
+                            {% if painting.visible %}Masquer{% else %}Afficher{% endif %}
+                        </button>
+                    </form>
+                    
+                    <form action="{{ path('admin_painting_delete', {id: painting.id}) }}" method="post" style="display:inline;" onsubmit="return confirm('Supprimer cette peinture ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ painting.id) }}">
+                        <button class="btn btn-sm btn-outline-danger">🗑️ Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">Aucune peinture enregistrée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

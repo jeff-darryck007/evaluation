@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+  {{ include('navBar.html.twig') }}
+
+ <!-- HERO AVEC CARROUSEL -->
+  <section class="hero">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97" class="d-block w-100" alt="Art 1">
+        </div>
+        <div class="carousel-item">
+          <img src="https://images.unsplash.com/photo-1503264116251-35a269479413" class="d-block w-100" alt="Art 2">
+        </div>
+        <div class="carousel-item">
+          <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9" class="d-block w-100" alt="Art 3">
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-content"> 
+      <h1>Explorez la Galerie</h1>
+      <p>Découvrez des œuvres inspirantes d’artistes passionnés</p>
+      <a href="/gallery" class="btn btn-light btn-lg mt-3">Voir les œuvres</a>
+    </div>
+  </section>
+
+
+
+  <!-- À PROPOS -->
+  <section class="bg-light py-5">
+    <div class="container text-center">
+      <h2 class="fw-bold mb-4">À propos</h2>
+      <p class="lead">Notre galerie met en avant des artistes talentueux et des œuvres inspirantes.  
+      Ce site a pour vocation de rendre l’art accessible à tous, de favoriser la découverte et de partager la passion de la création.</p>
+    </div>
+  </section>
+
+  {{ include('footer.html.twig') }}
+
+{% endblock %}
