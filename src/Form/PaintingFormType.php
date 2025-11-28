@@ -109,4 +109,6 @@ class PaintingFormType extends AbstractType
             'data_class' => Painting::class,
         ]);
     }
+
+    
 }

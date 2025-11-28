@@ -25,6 +25,8 @@ return [
         '/' => [[['_route' => 'app_home2', '_controller' => 'App\\Controller\\HomeController::index2'], null, null, null, false, false, null]],
         '/about' => [[['_route' => 'app_about', '_controller' => 'App\\Controller\\HomeController::about'], null, null, null, false, false, null]],
         '/team' => [[['_route' => 'app_team', '_controller' => 'App\\Controller\\HomeController::team'], null, null, null, false, false, null]],
+        '/profil' => [[['_route' => 'user_profil', '_controller' => 'App\\Controller\\HomeController::profil'], null, null, null, false, false, null]],
+        '/contact' => [[['_route' => 'app_contact', '_controller' => 'App\\Controller\\HomeController::contact'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'

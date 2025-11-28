@@ -21,51 +21,38 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class AdminController extends AbstractController
 {  
-    #[Route('/login', name: 'app_login')]
-    public function login( 
-        Request $request, 
-        EntityManagerInterface $em
-    ): Response
+ #[Route('/login', name: 'app_login')]
+    public function login(Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(LoginType::class);
         $form->handleRequest($request);
 
         $error = null;
-        $userFound = null;
-        
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->get('email')->getData();
             $password = $form->get('password')->getData();
-            $data = [
-                'email' => $email,
-                'password' => $password,
-            ];
-           
-            // 1. Trouver l’utilisateur par email
+
+            // Cherche l'utilisateur par email
             $userFound = $em->getRepository(User::class)->findOneBy([
-                'email' => $data['email'],
+                'email' => $email,
             ]);
-            
-            if (!$userFound) {
-                $error = "Adresse email inconnue.";
+
+            // ❌ Email inexistant ou mot de passe incorrect
+            if (!$userFound || $userFound->getPassword() !== md5($password)) {
+                $error = "Informations de connexion incorrectes.";
             } else {
-                // 2. Vérifier le mot de passe
-                if ($userFound->getPassword() === md5($data['password'])) {
-                    $session = $request->getSession();
-                    $session->set('user', $userFound);
+                // ✅ Connexion réussie : création de la session
+                $session = $request->getSession();
+                $session->set('user', $userFound);
 
-                    // si user
-                    if($userFound->getType() === "user"){
-                        return $this->redirectToRoute('app_home'); // page que tu veux
-                    }
+                // Redirection selon le type
+                if ($userFound->getType() === "user") {
+                    return $this->redirectToRoute('app_home');
+                }
 
-                    // si admin
-                    if($userFound->getType() === "admin"){
-                        return $this->redirectToRoute('admin_painting_index'); // page que tu veux
-                    }
-                } else {
-                    $error = "Mot de passe incorrect.";
+                if ($userFound->getType() === "admin") {
+                    return $this->redirectToRoute('admin_painting_index');
                 }
             }
         }
@@ -76,7 +63,6 @@ final class AdminController extends AbstractController
             'user' => null,
         ]);
     }
-
     #[Route('/register', name: 'app_register')]
     public function register(
         Request $request,

@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+{{ include('navBar.html.twig') }}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #0d6efd, #6f42c1);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .edit-box {
+        background: #fff;
+        padding: 40px 30px;
+        border-radius: 18px;
+        max-width: 500px;
+        width: 100%;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .toggle-icon {
+        cursor: pointer;
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: #777;
+    }
+</style>
+
+<div class="edit-box">
+    <h3 class="text-center fw-bold text-primary mb-4">✏️ Modifier mon profil</h3>
+
+    {# Messages flash #}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form) }}
+
+        <div class="mb-3">
+            {{ form_label(form.name) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Votre nom complet'}}) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'exemple@mail.com'}}) }}
+        </div>
+
+        <div class="mb-3 position-relative">
+            {{ form_label(form.password.first) }}
+            {{ form_widget(form.password.first, {'attr': {'class': 'form-control', 'id': 'passwordField'}}) }}
+            <span id="togglePassword" class="toggle-icon">👁️</span>
+        </div>
+
+        <div class="mb-3 position-relative">
+            {{ form_label(form.password.second) }}
+            {{ form_widget(form.password.second, {'attr': {'class': 'form-control', 'id': 'passwordField2'}}) }}
+            <span id="togglePassword2" class="toggle-icon">👁️</span>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100 mt-3">💾 Enregistrer</button>
+
+    {{ form_end(form) }}
+</div>
+
+<script>
+    function togglePassword(fieldId, iconId) {
+        const field = document.getElementById(fieldId);
+        const icon = document.getElementById(iconId);
+        icon.addEventListener('click', () => {
+            const type = field.type === 'password' ? 'text' : 'password';
+            field.type = type;
+            icon.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+    }
+
+    togglePassword('passwordField', 'togglePassword');
+    togglePassword('passwordField2', 'togglePassword2');
+</script>
+
+{% endblock %}

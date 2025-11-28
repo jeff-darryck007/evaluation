@@ -32,6 +32,8 @@ return [
     'app_home2' => [[], ['_controller' => 'App\\Controller\\HomeController::index2'], [], [['text', '/']], [], [], []],
     'app_about' => [[], ['_controller' => 'App\\Controller\\HomeController::about'], [], [['text', '/about']], [], [], []],
     'app_team' => [[], ['_controller' => 'App\\Controller\\HomeController::team'], [], [['text', '/team']], [], [], []],
+    'user_profil' => [[], ['_controller' => 'App\\Controller\\HomeController::profil'], [], [['text', '/profil']], [], [], []],
+    'app_contact' => [[], ['_controller' => 'App\\Controller\\HomeController::contact'], [], [['text', '/contact']], [], [], []],
     'App\Controller\AdminController::login' => [[], ['_controller' => 'App\\Controller\\AdminController::login'], [], [['text', '/login']], [], [], []],
     'App\Controller\AdminController::register' => [[], ['_controller' => 'App\\Controller\\AdminController::register'], [], [['text', '/register']], [], [], []],
     'App\Controller\AdminController::logout' => [[], ['_controller' => 'App\\Controller\\AdminController::logout'], [], [['text', '/logout']], [], [], []],
@@ -46,4 +48,6 @@ return [
     'App\Controller\HomeController::index2' => [[], ['_controller' => 'App\\Controller\\HomeController::index2'], [], [['text', '/']], [], [], []],
     'App\Controller\HomeController::about' => [[], ['_controller' => 'App\\Controller\\HomeController::about'], [], [['text', '/about']], [], [], []],
     'App\Controller\HomeController::team' => [[], ['_controller' => 'App\\Controller\\HomeController::team'], [], [['text', '/team']], [], [], []],
+    'App\Controller\HomeController::profil' => [[], ['_controller' => 'App\\Controller\\HomeController::profil'], [], [['text', '/profil']], [], [], []],
+    'App\Controller\HomeController::contact' => [[], ['_controller' => 'App\\Controller\\HomeController::contact'], [], [['text', '/contact']], [], [], []],
 ];

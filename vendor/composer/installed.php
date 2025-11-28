@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => 'dev-develop',
-        'version' => 'dev-develop',
-        'reference' => 'e0df7996280071c6c56bc7bd59480f6730efd3e4',
+        'pretty_version' => 'dev-feature/takam',
+        'version' => 'dev-feature/takam',
+        'reference' => '2a582b1206e01d7634eae2425d17565aa5334a33',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'dev-develop',
-            'version' => 'dev-develop',
-            'reference' => 'e0df7996280071c6c56bc7bd59480f6730efd3e4',
+            'pretty_version' => 'dev-feature/takam',
+            'version' => 'dev-feature/takam',
+            'reference' => '2a582b1206e01d7634eae2425d17565aa5334a33',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
