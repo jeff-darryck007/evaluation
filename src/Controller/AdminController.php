@@ -127,53 +127,42 @@ final class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/add', name: 'admin_painting_add', methods: ['GET', 'POST'])]
-    public function add(Request $request, EntityManagerInterface $em): Response
-    {
-        // 1️⃣ Crée une nouvelle entité Painting
-        $painting = new Painting();
+#[Route('/add', name: 'admin_painting_add', methods: ['GET', 'POST'])]
+public function add(Request $request, EntityManagerInterface $em): Response
+{
+    $painting = new Painting();
+    $form = $this->createForm(PaintingFormType::class, $painting);
+    $form->handleRequest($request); 
 
-        // 2️⃣ Création du formulaire
-        $form = $this->createForm(PaintingFormType::class, $painting);
-        $form->handleRequest($request); 
+    if ($form->isSubmitted() && $form->isValid()) {
+        /** @var UploadedFile|null $file */
+        $file = $form->get('image')->getData();
 
-        if ($form->isSubmitted() ) {
-            foreach ($form->getErrors(true) as $error) {
-        dump($error->getOrigin()->getName(), $error->getMessage());
-    }
-            // 3️⃣ Gestion de l'image uploadée
-            $file = $form->get('image')->getData();
+        if ($file instanceof UploadedFile) {
+            $extension = $file->guessExtension() ?: 'jpg';
+            $newFilename = uniqid() . '.' . $extension;
 
-            if ($file instanceof UploadedFile) {
-                // Nom unique pour le fichier
-                $newFilename = uniqid() . '.' . $file->guessExtension();
-
-                // Chemin du dossier de destination (configuré dans services.yaml)
-                $uploadDir = $this->getParameter('paintings_directory');
-
-                // Déplace le fichier uploadé dans /public/uploads/paintings
-                $file->move($uploadDir, $newFilename);
-
-                // Met à jour le nom du fichier dans l'entité
-                $painting->setImage($newFilename);
+            $uploadDir = $this->getParameter('paintings_directory');
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0775, true);
             }
 
-            // 4️⃣ Persiste la nouvelle entité
-            $em->persist($painting);
-            $em->flush();
-
-            // 5️⃣ Message flash
-            $this->addFlash('success', 'La peinture a été ajoutée avec succès.');
-
-            // 6️⃣ Redirection
-            return $this->redirectToRoute('admin_painting_index');
+            $file->move($uploadDir, $newFilename);
+            $painting->setImage($newFilename);
         }
 
-        return $this->render('pages/addPaining.html.twig', [
-            'form' => $form->createView(),
-            'painting' => $painting, // utile si tu veux réutiliser certaines parties du template
-        ]);
+        $em->persist($painting);
+        $em->flush();
+
+        $this->addFlash('success', 'La peinture a été ajoutée avec succès.');
+        return $this->redirectToRoute('admin_painting_index');
     }
+
+    return $this->render('pages/addPaining.html.twig', [
+        'form' => $form->createView(),
+        'painting' => $painting,
+    ]);
+}
 
 
     #[Route('/edit/{id}', name: 'admin_painting_edit', methods: ['GET', 'POST'])]

@@ -152,58 +152,58 @@ public function profil(Request $request, SessionInterface $session, UserPassword
     //          PAGE CONTACT
     // ================================
 
-   #[Route('/contact', name: 'app_contact')]
-public function contact(
-    Request $request,
-    SessionInterface $session,
-    HttpClientInterface $httpClient
-): Response {
-    $user = $session->get('user');
+        #[Route('/contact', name: 'app_contact')]
+        public function contact(
+            Request $request,
+            SessionInterface $session,
+            HttpClientInterface $httpClient
+        ): Response {
+            $user = $session->get('user');
 
-    // Clé reCAPTCHA à passer au template
-    $recaptchaSiteKey = $_ENV['RECAPTCHA_SITE_KEY'] ?? null;
+            // Clé reCAPTCHA à passer au template
+            $recaptchaSiteKey = $_ENV['RECAPTCHA_SITE_KEY'] ?? null;
 
-    // Si le formulaire est soumis
-    if ($request->isMethod('POST')) {
+            // Si le formulaire est soumis
+            if ($request->isMethod('POST')) {
 
-        // -----------------------
-        // 1. Vérification CAPTCHA
-        // -----------------------
-        $captchaResponse = $request->request->get('g-recaptcha-response');
+                // -----------------------
+                // 1. Vérification CAPTCHA
+                // -----------------------
+                $captchaResponse = $request->request->get('g-recaptcha-response');
 
-        $verify = $httpClient->request('POST', 'https://www.google.com/recaptcha/api/siteverify', [
-            'body' => [
-                'secret' => $_ENV['RECAPTCHA_SECRET_KEY'] ?? '',
-                'response' => $captchaResponse
-            ]
-        ]);
+                $verify = $httpClient->request('POST', 'https://www.google.com/recaptcha/api/siteverify', [
+                    'body' => [
+                        'secret' => $_ENV['RECAPTCHA_SECRET_KEY'] ?? '',
+                        'response' => $captchaResponse
+                    ]
+                ]);
 
-        $captchaData = $verify->toArray();
+                $captchaData = $verify->toArray();
 
-        if (!$captchaData['success']) {
-            $this->addFlash('error', 'Veuillez valider le CAPTCHA.');
-            return $this->redirectToRoute('app_contact');
+                if (!$captchaData['success']) {
+                    $this->addFlash('error', 'Veuillez valider le CAPTCHA.');
+                    return $this->redirectToRoute('app_contact');
+                }
+
+                // -----------------------
+                // 2. Traitement du message
+                // -----------------------
+                $name = $request->request->get('name');
+                $email = $request->request->get('email');
+                $subject = $request->request->get('subject');
+                $message = $request->request->get('message');
+
+                // TODO : Envoi d’email ou enregistrement DB ici
+
+                $this->addFlash('success', 'Votre message a bien été envoyé.');
+                return $this->redirectToRoute('app_contact');
+            }
+
+            // Affichage initial
+            return $this->render('pages/contact.html.twig', [
+                'controller_name' => 'HomeController',
+                'user' => $user,
+                'recaptcha_site_key' => $recaptchaSiteKey, // <--- clé passée au template
+            ]);
         }
-
-        // -----------------------
-        // 2. Traitement du message
-        // -----------------------
-        $name = $request->request->get('name');
-        $email = $request->request->get('email');
-        $subject = $request->request->get('subject');
-        $message = $request->request->get('message');
-
-        // TODO : Envoi d’email ou enregistrement DB ici
-
-        $this->addFlash('success', 'Votre message a bien été envoyé.');
-        return $this->redirectToRoute('app_contact');
-    }
-
-    // Affichage initial
-    return $this->render('pages/contact.html.twig', [
-        'controller_name' => 'HomeController',
-        'user' => $user,
-        'recaptcha_site_key' => $recaptchaSiteKey, // <--- clé passée au template
-    ]);
-}
 }

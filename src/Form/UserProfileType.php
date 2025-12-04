@@ -22,10 +22,13 @@ class UserProfileType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Adresse email',
             ])
+
+            // Nouveau mot de passe (non mappé)
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'required' => false,
-                'first_options'  => ['label' => 'Mot de passe'],
+                'mapped' => false,       // 🔥 très important : le mot de passe NE DOIT PAS remplacer automatiquement celui en BDD
+                'required' => false,     // mot de passe facultatif
+                'first_options'  => ['label' => 'Nouveau mot de passe'],
                 'second_options' => ['label' => 'Confirmer le mot de passe'],
             ]);
     }

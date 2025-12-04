@@ -23,6 +23,9 @@
 
                     <form method="POST" action="{{ path('app_contact') }}" class="shadow p-4 rounded bg-light">
 
+                        {# Sécurité CSRF (fortement recommandé) #}
+                        <input type="hidden" name="_token" value="{{ csrf_token('contact_form') }}">
+
                         <div class="mb-3">
                             <label for="name" class="form-label">Votre nom</label>
                             <input type="text" name="name" id="name" class="form-control" required>
@@ -44,8 +47,14 @@
                         </div>
 
                         {# GOOGLE RECAPTCHA #}
-                        {% if recaptcha_site_key is defined %}
-                            <div class="g-recaptcha mb-3" data-sitekey="{{ recaptcha_site_key }}"></div>
+                        {% if recaptcha_site_key is defined and recaptcha_site_key %}
+                            <div class="g-recaptcha mb-3"
+                                 data-sitekey="{{ recaptcha_site_key }}">
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                ⚠️ reCAPTCHA non configuré (clé manquante)
+                            </div>
                         {% endif %}
 
                         <div class="text-center">

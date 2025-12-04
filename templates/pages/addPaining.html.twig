@@ -6,9 +6,9 @@
 <div class="container mt-5">
     <h2 class="mb-4">🎨 Ajouter une nouvelle peinture</h2>
 
-    {# ⚠️ Important : enctype pour le upload #}
-    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-    
+    {# Formulaire avec enctype multipart/form-data pour les fichiers #}
+    {{ form_start(form) }}
+
     <div class="row">
         <div class="col-md-6 mb-3">
             {{ form_row(form.title) }}
@@ -40,8 +40,7 @@
         </div>
 
         <div class="col-md-6 mb-3">
-            {{ form_label(form.image, 'Image de la peinture') }}
-            {{ form_widget(form.image) }} 
+            {{ form_row(form.image) }}
         </div>
     </div>
 
